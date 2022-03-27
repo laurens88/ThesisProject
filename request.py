@@ -30,9 +30,9 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': '-has:links -@LinkSync_tech (#crypto OR #cryptocurrency OR #BTC OR XRP OR #XRP OR #ETH OR dogecoin OR cardano OR polkadot OR dogecoin OR paycoin OR altcoin) ((is down) OR (is up) OR (last hour) OR 📈 OR 📉 OR 🚀 OR (current price) OR opinion OR changes OR today OR summary) -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #BTC OR XRP OR #XRP OR #ETH OR dogecoin OR cardano OR polkadot OR dogecoin OR paycoin OR altcoin) -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
-    f = open("neu1.json", 'w')
+    f = open("mixed.json", 'w')
     f.write(json.dumps(json_response, indent=0, sort_keys=True))
     f.close()
     print(f"{query_params['max_results']} tweets pulled.")

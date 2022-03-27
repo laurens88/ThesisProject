@@ -8,7 +8,7 @@ import numpy as np
 
 
 def convert():
-    jsonfile = open('positive/pos1_use100.json', 'r')
+    jsonfile = open('mixed.json', 'r')
     values = json.load(jsonfile)
     jsonfile.close()
     tweets = len(values['data'])
@@ -26,7 +26,7 @@ def convert():
     data = {'id': ids, 'tweet': input_tweets, 'label': labels}
     df = pd.DataFrame(data)  # Use this for the model (Labels missing here)
 
-    filename = "positive/pos1_use100.csv"
+    filename = "mixed.csv"
     filepath = Path(filename)
     df.to_csv(filepath)
 
