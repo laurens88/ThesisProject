@@ -5,8 +5,8 @@ import json
 
 
 def main():
-    request.request(100)  # Pull
-    #label.convert()  # Prepare for lighttag
+    #request.request(100)  # Pull
+    label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
 
 
