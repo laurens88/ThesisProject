@@ -26,7 +26,7 @@ def bearer_oauth(r):
 #  Create connection between Twitter API and client side
 def connect_to_endpoint(url, params):
     response = requests.get(url, auth=bearer_oauth, params=params)
-    print(response.status_code)
+    #print(response.status_code)
     if response.status_code != 200:
         raise Exception(response.status_code, response.text)
     return response.json()
@@ -34,7 +34,7 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #BTC OR #ETH OR #altcoin) -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #cryptotrading OR #CryptoNews OR #CryptocurrencyNews OR #BTC OR #bitcoin OR #ETH OR #altcoin OR #XRP OR #USDT OR #LUNA OR #Terra OR #ADA OR Cardano OR #BNB OR #AVAX OR #Tether) -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
