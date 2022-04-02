@@ -1,6 +1,10 @@
 import sys
+
+import pandas as pd
 import requests
 import json
+from datetime import datetime
+import os
 
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAMINZgEAAAAA5x%2Fnm4e%2FYuAaae1N1b7F7czW%2FN8" \
                "%3Dq5K6FTJGdugV5loBhz7iyt2zTgE2nCR4rYUSYoDsdRNZtBgu49"
@@ -30,13 +34,33 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #BTC) -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #BTC OR #ETH OR #altcoin) -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
-    f = open("mixed1.json", 'w')
+    filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
+    f = open(filename, 'w')
     f.write(json.dumps(json_response, indent=0, sort_keys=True))
     f.close()
     print(f"{query_params['max_results']} tweets pulled.")
 
+
+#  Merge all json files in Data folder into one json file
+def merge():
+    directory = "Data"
+    ids = []
+    tweets = []
+    data = []
+    datastructure = [{'data': data}]
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f) and filename != "Tweets.json": #and f is not total file
+            current = open(f, 'r')
+            values = json.load(current)
+            for tweet in range(0, values['meta']['result_count']):
+                tweet_id = str(values['data'][tweet]['id'])
+                tweet = values['data'][tweet]['text']
+                data.append({'id': tweet_id, 'text': tweet})
+    df = pd.DataFrame(datastructure)
+    df.to_json("Data/Tweets.json")
 
 def main():
     request(10)

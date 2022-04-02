@@ -8,25 +8,26 @@ import numpy as np
 
 
 def convert():
-    jsonfile = open('mixed.json', 'r')
+    jsonfile = open('Data/Tweets.json', 'r')
     values = json.load(jsonfile)
     jsonfile.close()
-    tweets = len(values['data'])
+    tweets = len(values['data']['0'])
+    print(tweets)
 
     input_tweets = []
     labels = []
     ids = []
 
     for tweet in range(0, tweets):
-        tweet_id = values['data'][tweet]['id']
+        tweet_id = str(values['data']['0'][tweet]['id'])
         ids.append(tweet_id)
-        text = values['data'][tweet]['text']
+        text = values['data']['0'][tweet]['text']
         input_tweets.append(text)
         labels.append("")
     data = {'id': ids, 'tweet': input_tweets, 'label': labels}
     df = pd.DataFrame(data)  # Use this for the model (Labels missing here)
 
-    filename = "mixed.csv"
+    filename = "LabeledData/Tweets.csv"
     filepath = Path(filename)
     df.to_csv(filepath)
 
