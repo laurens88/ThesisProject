@@ -6,8 +6,8 @@ import json
 
 def main():
     #request.request(100)  # Pull
-    #request.merge()  # Merge json tweet files
-    label.convert()  # Prepare for lighttag
+    request.merge()  # Merge json tweet files
+    #label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
 
 

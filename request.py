@@ -50,6 +50,7 @@ def merge():
     tweets = []
     data = []
     datastructure = [{'data': data}]
+    duplicate_check = []
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         if os.path.isfile(f) and filename != "Tweets.json": #and f is not total file
@@ -58,9 +59,12 @@ def merge():
             for tweet in range(0, values['meta']['result_count']):
                 tweet_id = str(values['data'][tweet]['id'])
                 tweet = values['data'][tweet]['text']
-                data.append({'id': tweet_id, 'text': tweet})
+                if tweet not in duplicate_check:
+                    data.append({'id': tweet_id, 'text': tweet})
+                    duplicate_check.append(tweet)
     df = pd.DataFrame(datastructure)
     df.to_json("Data/Tweets.json")
+    print(f"{len(duplicate_check)} tweets merged into Tweets.json")
 
 def main():
     request(10)
