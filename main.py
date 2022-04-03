@@ -2,11 +2,14 @@
 import label
 import request
 import json
+import time
 
 
 def main():
-    request.request(100)  # Pull
-    request.merge()  # Merge json tweet files
+    while True:
+        time.sleep(90)
+        request.request(100)  # Pull
+        request.merge()  # Merge json tweet files
     #label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
 
