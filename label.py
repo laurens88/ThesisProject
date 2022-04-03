@@ -33,6 +33,8 @@ def convert():
 
     return data, tweets
 
+def split_convert():
+    pass
 
 #  Test function to display the content of pulled Tweets
 def display(filename, limit):
