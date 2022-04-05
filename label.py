@@ -46,10 +46,10 @@ def split_convert():
         if values['data'][i]['label'] == "?":
             not_labeled.append(i)
 
-    samples = random.choices(not_labeled, k=50)
+    samples = random.choices(not_labeled, k=min(50, len(not_labeled)))
 
     data = []
-    for tweet in range(0, 50):
+    for tweet in range(0, len(samples)):
         data.append({'id': values['data'][samples[tweet]]['id'], 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
     df = pd.DataFrame(data)
     df.to_csv('LabeledData/Tweets50.csv')

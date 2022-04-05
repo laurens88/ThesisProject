@@ -57,7 +57,7 @@ def merge():
             for tweet in range(0, values['meta']['result_count']):
                 tweet_id = str(values['data'][tweet]['id'])
                 tweet = values['data'][tweet]['text']
-                if tweet not in duplicate_check:
+                if tweet not in duplicate_check and character_spam_check(tweet):
                     data.append({'id': tweet_id, 'text': tweet, 'label': "?"})
                     duplicate_check.append(tweet)
 
@@ -67,6 +67,20 @@ def merge():
 
     print(f"{len(duplicate_check)} tweets merged into Tweets.json")
 
+
+def character_spam_check(string):
+    if "down" in string or "bear" in string:
+        return True
+    has_counter = 0
+    at_counter = 0
+    for character in string:
+        if character == '#':
+            has_counter = has_counter + 1
+        if character == '@':
+            at_counter = at_counter + 1
+    if has_counter > 5 or at_counter > 3:
+        return False
+    return True
 
 def main():
     request(10)
