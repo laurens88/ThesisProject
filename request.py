@@ -34,7 +34,7 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP -@axltoken -Algo (#crypto OR #cryptocurrency OR #cryptotrading OR #CryptoNews OR #CryptocurrencyNews OR #BTC OR #bitcoin OR #ETH OR #altcoin OR #XRP OR #USDT OR #LUNA OR #Terra OR #ADA OR Cardano OR #BNB OR #AVAX OR #Tether) -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #cryptotrading OR #CryptoNews OR #CryptocurrencyNews OR #BTC OR #bitcoin OR #ETH OR #altcoin OR #XRP OR #USDT OR #LUNA OR #Terra OR #ADA OR Cardano OR #BNB OR #AVAX OR #Tether) -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
