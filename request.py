@@ -46,8 +46,6 @@ def request(limit):
 #  Merge all json files in Data folder into one json file
 def merge():
     directory = "Data"
-    ids = []
-    tweets = []
     data = []
     datastructure = {'data': data}
     duplicate_check = []
@@ -60,7 +58,7 @@ def merge():
                 tweet_id = str(values['data'][tweet]['id'])
                 tweet = values['data'][tweet]['text']
                 if tweet not in duplicate_check:
-                    data.append({'id': tweet_id, 'text': tweet})
+                    data.append({'id': tweet_id, 'text': tweet, 'label': "?"})
                     duplicate_check.append(tweet)
 
     f = open("Data/Tweets.json", 'w')
