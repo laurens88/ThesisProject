@@ -2,6 +2,7 @@ import json
 import pandas as pd
 from pathlib import Path
 import numpy as np
+import random
 
 #  Convert output json file from pull request to csv file. Csv file uploaded to lighttag
 #  Also returns the pandas dataframe and the number of tweets
@@ -32,8 +33,41 @@ def convert():
 
     return data, tweets
 
+
 def split_convert():
-    pass
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    not_labeled = []
+
+    tweets = len(values['data'])
+    for i in range(0, tweets):
+        if values['data'][i]['label'] == "?":
+            not_labeled.append(i)
+
+    samples = random.choices(not_labeled, k=50)
+
+    data = []
+    for tweet in range(0, 50):
+        data.append({'id': values['data'][samples[tweet]]['id'], 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
+    df = pd.DataFrame(data)
+    df.to_csv('LabeledData/Tweets50.csv')
+
+
+def reset_labels():
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    tweets = len(values['data'])
+    for i in range(0, tweets):
+        values['data'][i]['label'] = "?"
+
+    f = open("Data/Tweets.json", 'w')
+    f.write(json.dumps(values, indent=0, sort_keys=True))
+    f.close()
+
 
 #  Test function to display the content of pulled Tweets
 def display(filename, limit):
