@@ -6,10 +6,12 @@ import time
 
 
 def main():
-    while True:
-        time.sleep(90)
+    i = 0
+    while i < 10:
+        time.sleep(900)
         request.request(100)  # Pull
         request.merge()  # Merge json tweet files
+        i = i+1
     #label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
 
