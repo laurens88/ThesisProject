@@ -84,9 +84,9 @@ def character_spam_check(string):
     at_counter = 0
     for character in string:
         if character == '#':
-            has_counter = has_counter + 1
+            has_counter += 1
         if character == '@':
-            at_counter = at_counter + 1
+            at_counter += 1
     if has_counter > 5 or at_counter > 3:
         return False
     return True
@@ -96,6 +96,35 @@ def project_block(string):
     if "project" in string:
         return False
     return True
+
+
+def rank():
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    for i in range(len(values['data'])):
+        values['data'][i]['rank'] = score_tweet(values['data'][i]['text'])
+
+    #sort descending score
+
+    #delete score key?
+
+    f = open("Data/Tweets.json", 'w')
+    f.write(json.dumps(values, indent=0, sort_keys=True))
+    f.close()
+
+
+def score_tweet(string):
+    score = 0
+    tags = ["#crypto", "#bitcoin", "#btc", "#eth", "#cryptocurrency", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
+            "$usdt", "$avax"]
+    for tag in tags:
+        if tag in string.lower():
+            score += 1
+    if "$" in string:
+        score += 1
+    return score
 
 
 def main():
