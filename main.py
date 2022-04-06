@@ -6,13 +6,17 @@ import time
 
 
 def main():
-    #request.request(100)  # Pull
-    #request.merge()  # Merge json tweet files
+    # while True:
+    #     request.request(100)  # Pull
+    #     time.sleep(600)
+
+    request.merge()  # Merge json tweet files
+    request.rank()
     #label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
     #label.reset_labels()
     #label.split_convert()
-    request.rank()
+
 
 if __name__ == '__main__':
     main()

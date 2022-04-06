@@ -35,7 +35,7 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': '-has:links -@LinkSync_tech -@cz_binance -#DOJOSWAP (#crypto OR #cryptocurrency OR #cryptotrading OR #CryptoNews OR #CryptocurrencyNews OR #BTC OR #bitcoin OR #ETH OR #altcoin OR #XRP OR #USDT OR #LUNA OR #Terra OR #ADA OR Cardano OR #BNB OR #AVAX OR #Tether) -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-has:links (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
@@ -106,10 +106,8 @@ def rank():
     for i in range(len(values['data'])):
         values['data'][i]['rank'] = score_tweet(values['data'][i]['text'])
 
-    #sort descending score
+    # sort descending score
     values['data'] = sorted(values['data'], key=lambda x: x['rank'], reverse=True)
-
-    #delete score key?
 
     f = open("Data/Tweets.json", 'w')
     f.write(json.dumps(values, indent=0, sort_keys=True))
