@@ -107,6 +107,7 @@ def rank():
         values['data'][i]['rank'] = score_tweet(values['data'][i]['text'])
 
     #sort descending score
+    values['data'] = sorted(values['data'], key=lambda x: x['rank'], reverse=True)
 
     #delete score key?
 
