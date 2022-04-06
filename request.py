@@ -5,6 +5,7 @@ import requests
 import json
 from datetime import datetime
 import os
+from difflib import SequenceMatcher
 
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAMINZgEAAAAA5x%2Fnm4e%2FYuAaae1N1b7F7czW%2FN8" \
                "%3Dq5K6FTJGdugV5loBhz7iyt2zTgE2nCR4rYUSYoDsdRNZtBgu49"
@@ -57,15 +58,23 @@ def merge():
             for tweet in range(0, values['meta']['result_count']):
                 tweet_id = str(values['data'][tweet]['id'])
                 tweet = values['data'][tweet]['text']
-                if tweet not in duplicate_check and character_spam_check(tweet):
+                if project_block(tweet) and character_spam_check(tweet) and duplicate_checker(tweet, duplicate_check):
                     data.append({'id': tweet_id, 'text': tweet, 'label': "?"})
                     duplicate_check.append(tweet)
+                    print(len(data))
 
     f = open("Data/Tweets.json", 'w')
     f.write(json.dumps(datastructure, indent=0, sort_keys=True))
     f.close()
 
     print(f"{len(duplicate_check)} tweets merged into Tweets.json")
+
+
+def duplicate_checker(string, tweet_list):
+    for tweet in tweet_list:
+        if SequenceMatcher(None, tweet, string).ratio() > 0.9:
+            return False
+    return True
 
 
 def character_spam_check(string):
@@ -81,6 +90,13 @@ def character_spam_check(string):
     if has_counter > 5 or at_counter > 3:
         return False
     return True
+
+
+def project_block(string):
+    if "project" in string:
+        return False
+    return True
+
 
 def main():
     request(10)
