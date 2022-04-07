@@ -69,6 +69,25 @@ def reset_labels():
     f.close()
 
 
+def count_labels():
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    tweets = len(values['data'])
+    pos, neg, neu = 0, 0, 0
+    for i in range(tweets):
+        label = values['data'][i]['label']
+        if label == "Positive":
+            pos += 1
+        elif label == "Negative":
+            neg += 1
+        elif label == "Neutral":
+            neu += 1
+    print(f"Positive: {pos}\nNeutral: {neu} \nNegative: {neg} \n")
+
+
+
 #  Test function to display the content of pulled Tweets
 def display(filename, limit):
     jsonfile = open(filename, 'r')
@@ -83,32 +102,32 @@ def display(filename, limit):
 
 # Insert labels into csv after annotation is done in lighttag
 def insert_labels():
-    data, tweets = convert()
-    jsonfile = open('positive/pos1_annotations.json', 'r', encoding="utf8")
-    values = json.load(jsonfile)
+    jsonfile = open('LabeledData/annotations.json', 'r', encoding="utf8")
+    annotations = json.load(jsonfile)
     jsonfile.close()
 
-    jsonfile = open('positive/pos1_use100.json', 'r')
-    tweet_values = json.load(jsonfile)
+    jsonfile = open('Data/Tweets.json', 'r')
+    tweets = json.load(jsonfile)
     jsonfile.close()
 
-    classnames = []
-    for n in range(0, tweets):
-        classnames.append("")
-    for label in range(0, tweets):
-        for tweet in range(0, tweets):
-            if tweet_values['data'][tweet]['text'] == values['examples'][label]['content']:
-                classnames[tweet] = values['examples'][label]['classifications'][0]['classname']
-    data['label'] = list(classnames)
-    df = pd.DataFrame(data)  # This is probably used for the model, csv is just for visual representation
+    n_tweets = len(tweets['data'])
+    n_labels = len(annotations['examples'])
+    matches = 0
 
-    filename = "positive/pos1_annotated.csv"
-    filepath = Path(filename)
-    df.to_csv(filepath)
+    # Match tweets by tweet id and set label
+    for annotation in range(n_labels):
+        tweet_id = annotations['examples'][annotation]['metadata']['id']
+        label = annotations['examples'][annotation]['classifications'][0]['classname']
+        for tweet in range(n_tweets):
+            if tweets['data'][tweet]['id'] == tweet_id:
+                tweets['data'][tweet]['label'] = label
+                matches += 1
 
-    df.to_json("positive/pos1_annotated.json")
+    f = open("Data/Tweets.json", 'w')
+    f.write(json.dumps(tweets, indent=0, sort_keys=True))
+    f.close()
 
-    print(f"Annotations stored in {filename}")
+    print(f"{matches} labels inserted into Tweets.json")
 
 
 def main():
