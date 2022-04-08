@@ -67,6 +67,14 @@ def merge():
     f.write(json.dumps(datastructure, indent=0, sort_keys=True))
     f.close()
 
+    path, dirs, files = next(os.walk("Backups"))
+    file_count = len(files)
+    filename = f"Backups/Tweets{file_count}.json"
+
+    f = open(filename, 'w')
+    f.write(json.dumps(datastructure, indent=0, sort_keys=True))
+    f.close()
+
     print(f"{len(duplicate_check)} tweets merged into Tweets.json")
 
 

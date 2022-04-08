@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 import numpy as np
 import random
+from datetime import datetime
 
 #  Convert output json file from pull request to csv file. Csv file uploaded to lighttag
 #  Also returns the pandas dataframe and the number of tweets
@@ -52,7 +53,8 @@ def split_convert():
     for tweet in range(0, len(samples)):
         data.append({'id': values['data'][samples[tweet]]['id'], 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
     df = pd.DataFrame(data)
-    df.to_csv('LabeledData/Tweets50.csv')
+    filename = "LabeledData/"+datetime.now().strftime("%d-%m-%H-%M")+".csv"
+    df.to_csv(filename)
 
 
 def reset_labels():
