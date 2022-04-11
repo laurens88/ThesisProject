@@ -4,15 +4,24 @@ import request
 import json
 import time
 import os
+import datetime
+
 
 def main():
-    #request.request(100)  # Pull
-    # request.merge()  # Merge json tweet files
-    # request.rank()
+    while datetime.datetime.now().hour != 4:
+        request.request(100)  # Pull
+        time.sleep(65)
+        request.requestMedia(100)
+        time.sleep(65)
+        request.requestNeg(100)
+        time.sleep(1800)
+
+    request.merge()  # Merge json tweet files
+    request.rank()
     #label.convert()  # Prepare for lighttag
     #label.insert_labels()  # Finalize data
     #label.reset_labels()
-    label.split_convert()
+    #label.split_convert()
     #label.count_labels()
 
 

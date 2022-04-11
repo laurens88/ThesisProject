@@ -51,10 +51,12 @@ def split_convert():
 
     data = []
     for tweet in range(0, len(samples)):
-        data.append({'id': values['data'][samples[tweet]]['id'], 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
+        data.append({'id': str(values['data'][samples[tweet]]['id']), 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
+    print(type(data[0]['id']))
     df = pd.DataFrame(data)
     filename = "LabeledData/"+datetime.now().strftime("%d-%m-%H-%M")+".csv"
     df.to_csv(filename)
+    print(f"{filename} generated.")
 
 
 def reset_labels():

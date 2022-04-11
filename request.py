@@ -35,13 +35,33 @@ def connect_to_endpoint(url, params):
 
 #  Pull tweets from Twitter
 def request(limit):
-    query_params = {'query': 'has:media -project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
     f.write(json.dumps(json_response, indent=0, sort_keys=True))
     f.close()
     print(f"{query_params['max_results']} tweets pulled.")
+
+
+def requestMedia(limit):
+    query_params = {'query': 'has:media -project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    json_response = connect_to_endpoint(search_url, query_params)
+    filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
+    f = open(filename, 'w')
+    f.write(json.dumps(json_response, indent=0, sort_keys=True))
+    f.close()
+    print(f"{query_params['max_results']} media tweets pulled.")
+
+
+def requestNeg(limit):
+    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) (down OR bear OR bearish OR unstable OR weak OR crash OR down by OR 📉 OR scam OR 💸 OR desperate OR lost OR risky OR sad OR decreasing) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    json_response = connect_to_endpoint(search_url, query_params)
+    filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
+    f = open(filename, 'w')
+    f.write(json.dumps(json_response, indent=0, sort_keys=True))
+    f.close()
+    print(f"{query_params['max_results']} negative tweets pulled.")
 
 
 #  Merge all json files in Data folder into one json file
@@ -120,6 +140,8 @@ def rank():
     f = open("Data/Tweets.json", 'w')
     f.write(json.dumps(values, indent=0, sort_keys=True))
     f.close()
+
+    print("Tweets.json is now ranked")
 
 
 def score_tweet(string):
