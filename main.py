@@ -10,9 +10,9 @@ import datetime
 def main():
     while datetime.datetime.now().hour != 4:
         request.request(100)  # Pull
-        time.sleep(65)
+        time.sleep(61)
         request.requestMedia(100)
-        time.sleep(65)
+        time.sleep(61)
         request.requestNeg(100)
         time.sleep(1800)
 
