@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 import random
 from datetime import datetime
+import os
 
 #  Convert output json file from pull request to csv file. Csv file uploaded to lighttag
 #  Also returns the pandas dataframe and the number of tweets
@@ -52,7 +53,6 @@ def split_convert():
     data = []
     for tweet in range(0, len(samples)):
         data.append({'id': str(values['data'][samples[tweet]]['id']), 'text': values['data'][samples[tweet]]['text'], 'label': "?"})
-    print(type(data[0]['id']))
     df = pd.DataFrame(data)
     filename = "LabeledData/"+datetime.now().strftime("%d-%m-%H-%M")+".csv"
     df.to_csv(filename)
@@ -91,7 +91,6 @@ def count_labels():
     print(f"Positive: {pos}\nNeutral: {neu} \nNegative: {neg} \n")
 
 
-
 #  Test function to display the content of pulled Tweets
 def display(filename, limit):
     jsonfile = open(filename, 'r')
@@ -104,34 +103,37 @@ def display(filename, limit):
         print("----------------")
 
 
-# Insert labels into csv after annotation is done in lighttag
+# Insert labels from lighttag into Tweets.json
 def insert_labels():
-    jsonfile = open('LabeledData/annotations.json', 'r', encoding="utf8")
-    annotations = json.load(jsonfile)
-    jsonfile.close()
-
     jsonfile = open('Data/Tweets.json', 'r')
     tweets = json.load(jsonfile)
     jsonfile.close()
-
     n_tweets = len(tweets['data'])
-    n_labels = len(annotations['examples'])
-    matches = 0
 
-    # Match tweets by tweet id and set label
-    for annotation in range(n_labels):
-        tweet_id = annotations['examples'][annotation]['metadata']['id']
-        label = annotations['examples'][annotation]['classifications'][0]['classname']
-        for tweet in range(n_tweets):
-            if tweets['data'][tweet]['id'] == tweet_id:
-                tweets['data'][tweet]['label'] = label
-                matches += 1
+    directory = "LabeledData"
+
+    for filename in os.listdir(directory):
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f) and filename.endswith('.json'):
+            jsonfile = open(f, 'r', encoding="utf8")
+            annotations = json.load(jsonfile)
+            jsonfile.close()
+
+            n_labels = len(annotations['examples'])
+
+            # Match tweets by tweet id and set label
+            for annotation in range(n_labels):
+                tweet_id = annotations['examples'][annotation]['metadata']['id']
+                label = annotations['examples'][annotation]['classifications'][0]['classname']
+                for tweet in range(n_tweets):
+                    if tweets['data'][tweet]['id'] == tweet_id:
+                        tweets['data'][tweet]['label'] = label
 
     f = open("Data/Tweets.json", 'w')
     f.write(json.dumps(tweets, indent=0, sort_keys=True))
     f.close()
 
-    print(f"{matches} labels inserted into Tweets.json")
+    print("Labels inserted into Tweets.json")
 
 
 def main():

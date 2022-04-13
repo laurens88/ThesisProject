@@ -17,12 +17,12 @@ def main():
     #     time.sleep(1800)
     #
     # request.merge()  # Merge json tweet files
-    request.rank()
+    #request.rank()
     #label.convert()  # Prepare for lighttag
-    #label.insert_labels()  # Finalize data
+    label.insert_labels()  # Finalize data
     #label.reset_labels()
     #label.split_convert()
-    #label.count_labels()
+    label.count_labels()
 
 
 if __name__ == '__main__':
