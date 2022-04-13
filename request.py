@@ -146,12 +146,18 @@ def rank():
 
 def score_tweet(string):
     score = 0
-    tags = ["#crypto", "#bitcoin", "#btc", "#eth", "#cryptocurrency", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
+    tags = ["bitcoin", "cardano", "ethereum", "ripple", "avax", "avalanche", "#crypto", "#bitcoin", "#btc", "#eth", "#xrp", "#cryptocurrency", "#altcoin", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
             "$usdt", "$avax"]
+    unrelated = [" nft ", "giveaway", "airdrop"]
     for tag in tags:
         if tag in string.lower():
             score += 1
+    for token in unrelated:
+        if token in string.lower():
+            score -= 3
     if "$" in string:
+        score += 1
+    if "%" in string:
         score += 1
     return score
 
