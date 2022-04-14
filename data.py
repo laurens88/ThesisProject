@@ -1,5 +1,3 @@
-import sys
-import pandas as pd
 import requests
 import json
 from datetime import datetime
@@ -10,10 +8,6 @@ bearer_token = "AAAAAAAAAAAAAAAAAAAAAMINZgEAAAAA5x%2Fnm4e%2FYuAaae1N1b7F7czW%2FN
                "%3Dq5K6FTJGdugV5loBhz7iyt2zTgE2nCR4rYUSYoDsdRNZtBgu49"
 
 search_url = 'https://api.twitter.com/2/tweets/search/recent'
-
-# add different query for every label including the additional keywords
-
-#query_params = {'query': 'from:laurens_debruin has:hashtags ', 'tweet.fields': 'text'}
 
 
 #  Set authorization in request header
@@ -26,15 +20,15 @@ def bearer_oauth(r):
 #  Create connection between Twitter API and client side
 def connect_to_endpoint(url, params):
     response = requests.get(url, auth=bearer_oauth, params=params)
-    #print(response.status_code)
     if response.status_code != 200:
         raise Exception(response.status_code, response.text)
     return response.json()
 
 
-#  Pull tweets from Twitter
+#  Pull tweets from Twitter with general query
 def request(limit):
-    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting '
+                             '-giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
@@ -43,8 +37,10 @@ def request(limit):
     print(f"{query_params['max_results']} tweets pulled.")
 
 
-def requestMedia(limit):
-    query_params = {'query': 'has:media -project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+#  Pull tweets from Twitter with query for tweets with media
+def request_media(limit):
+    query_params = {'query': 'has:media -project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) '
+                             '-Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
@@ -53,8 +49,12 @@ def requestMedia(limit):
     print(f"{query_params['max_results']} media tweets pulled.")
 
 
-def requestNeg(limit):
-    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) (down OR bear OR bearish OR unstable OR weak OR crash OR down by OR 📉 OR scam OR 💸 OR desperate OR lost OR risky OR sad OR decreasing) -Airdrop -#Airdrop -betting -giveaway -NFT lang:en -is:retweet', 'max_results': limit}
+#  Pull tweets from Twitter with query for negative sentiment tweets
+def request_neg(limit):
+    query_params = {'query': '-project (#BTC OR #bitcoin OR #cardano OR #XRP OR #ETH) '
+                             '(down OR bear OR bearish OR unstable OR weak OR crash OR down by OR 📉 OR scam OR 💸 '
+                             'OR desperate OR lost OR risky OR sad OR decreasing) -Airdrop -#Airdrop -betting -giveaway'
+                             '-NFT lang:en -is:retweet', 'max_results': limit}
     json_response = connect_to_endpoint(search_url, query_params)
     filename = "Data/"+datetime.now().strftime("%d-%m-%H-%M")+".json"
     f = open(filename, 'w')
@@ -63,7 +63,7 @@ def requestNeg(limit):
     print(f"{query_params['max_results']} negative tweets pulled.")
 
 
-#  Merge all json files in Data folder into one json file
+#  Merge all json files in Data folder into one json file called 'Tweets.json'
 def merge():
     directory = "Data"
     data = []
@@ -97,6 +97,7 @@ def merge():
     print(f"{len(duplicate_check)} tweets merged into Tweets.json")
 
 
+# Block tweets that match more than 90% to tweets that are already included.
 def duplicate_checker(string, tweet_list):
     for tweet in tweet_list:
         if SequenceMatcher(None, tweet, string).ratio() > 0.9:
@@ -104,6 +105,8 @@ def duplicate_checker(string, tweet_list):
     return True
 
 
+# Block tweets containing excess amount of # or @ for Tweets.json merge.
+# Tweets containing 'down' or 'bear' are not blocked in attempt to include more negative tweets.
 def character_spam_check(string):
     if "down" in string or "bear" in string:
         return True
@@ -119,12 +122,14 @@ def character_spam_check(string):
     return True
 
 
+# Block tweets containing the word 'project' for Tweets.json merge
 def project_block(string):
     if "project" in string:
         return False
     return True
 
 
+# Compute and insert rank values for tweets in Tweets.json
 def rank():
     jsonfile = open('Data/Tweets.json', 'r')
     values = json.load(jsonfile)
@@ -143,9 +148,11 @@ def rank():
     print("Tweets.json is now ranked")
 
 
+# Return the score for tweet that is passed as parameter 'string'
 def score_tweet(string):
     score = 0
-    tags = ["bitcoin", "cardano", "ethereum", "ripple", "avax", "avalanche", "#crypto", "#bitcoin", "#btc", "#eth", "#xrp", "#cryptocurrency", "#altcoin", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
+    tags = ["bitcoin", "cardano", "ethereum", "ripple", "avax", "avalanche", "#crypto", "#bitcoin", "#btc",
+            "#eth", "#xrp", "#cryptocurrency", "#altcoin", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
             "$usdt", "$avax"]
     unrelated = [" nft ", "giveaway", "airdrop"]
     for tag in tags:
@@ -161,9 +168,25 @@ def score_tweet(string):
     return score
 
 
-def main():
-    request(10)
+# Print the distribution of ranks in Tweets.json
+def rank_distribution():
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
 
+    distribution = {}
 
-if __name__ == '__main__':
-    main()
+    for i in range(len(values['data'])):
+        tweet_rank = str(values['data'][i]['rank'])
+        if tweet_rank in distribution.keys():
+            distribution[tweet_rank] += 1
+        else:
+            distribution[tweet_rank] = 1
+
+    ranks = sorted(distribution.keys(), key=lambda x: int(x))
+    rank_index = 0
+    while len(distribution.keys()) > 0:
+        print(f"Rank {ranks[rank_index]} occurs "
+              f"{distribution.pop(str(min([int(x) for x in distribution.keys()])))} times.")
+        rank_index += 1
+

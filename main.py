@@ -11,9 +11,9 @@ def main():
     # while datetime.datetime.now().hour != 4:
     #     data.request(100)  # Pull
     #     time.sleep(61)
-    #     data.requestMedia(100)
+    #     data.request_media(100)
     #     time.sleep(61)
-    #     data.requestNeg(100)
+    #     data.request_neg(100)
     #     time.sleep(1800)
     #
     # data.merge()  # Merge json tweet files
@@ -21,8 +21,9 @@ def main():
     #label.reset_labels()
 
     # label.split_convert()
-    label.insert_labels()  # Finalize data
-    label.count_labels()
+    # label.insert_labels()  # Finalize data
+    # label.count_labels()
+    data.rank_distribution()
 
 
 if __name__ == '__main__':
