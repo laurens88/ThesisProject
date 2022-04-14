@@ -18,9 +18,10 @@ def main():
     #
     # request.merge()  # Merge json tweet files
     #request.rank()
-    label.insert_labels()  # Finalize data
     #label.reset_labels()
-    #label.split_convert()
+
+    # label.split_convert()
+    label.insert_labels()  # Finalize data
     label.count_labels()
 
 
