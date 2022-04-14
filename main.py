@@ -1,6 +1,6 @@
 #  Laurens de Bruin Radboud University s1002199
 import label
-import request
+import data
 import json
 import time
 import os
@@ -9,15 +9,15 @@ import datetime
 
 def main():
     # while datetime.datetime.now().hour != 4:
-    #     request.request(100)  # Pull
+    #     data.request(100)  # Pull
     #     time.sleep(61)
-    #     request.requestMedia(100)
+    #     data.requestMedia(100)
     #     time.sleep(61)
-    #     request.requestNeg(100)
+    #     data.requestNeg(100)
     #     time.sleep(1800)
     #
-    # request.merge()  # Merge json tweet files
-    #request.rank()
+    # data.merge()  # Merge json tweet files
+    #data.rank()
     #label.reset_labels()
 
     # label.split_convert()
