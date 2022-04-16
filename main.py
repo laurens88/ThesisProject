@@ -18,12 +18,11 @@ def main():
     #
     # data.merge()  # Merge json tweet files
     #data.rank()
-    #label.reset_labels()
 
     # label.split_convert()
-    # label.insert_labels()  # Finalize data
-    # label.count_labels()
-    data.rank_distribution()
+    label.insert_labels()  # Finalize data
+    label.count_labels()
+    #data.rank_distribution()
 
 
 if __name__ == '__main__':
