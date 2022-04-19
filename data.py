@@ -106,10 +106,7 @@ def duplicate_checker(string, tweet_list):
 
 
 # Block tweets containing excess amount of # or @ for Tweets.json merge.
-# Tweets containing 'down' or 'bear' are not blocked in attempt to include more negative tweets.
 def character_spam_check(string):
-    if "down" in string or "bear" in string:
-        return True
     has_counter = 0
     at_counter = 0
     for character in string:
