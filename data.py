@@ -152,7 +152,7 @@ def score_tweet(string):
             "#eth", "#xrp", "#cryptocurrency", "#altcoin", "$btc", "$eth", "$xrp", "$sol", "$luna", "$ada",
             "$usdt", "$avax"]
     unrelated = [" nft ", "giveaway", "airdrop", "lightning", "#coinhuntworld", "#MasterMetals", "down", "up",
-                 "bear", "bull", "long", "short"]
+                 "bear", "bull", "long", "short", "change", "fear", "%"]
     for tag in tags:
         if tag in string.lower():
             score += 1

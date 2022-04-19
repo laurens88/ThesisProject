@@ -89,7 +89,8 @@ def insert_labels():
                 label = annotations['examples'][annotation]['classifications'][0]['classname']
                 for tweet in range(n_tweets):
                     if tweets['data'][tweet]['id'] == tweet_id:
-                        tweets['data'][tweet]['label'] = label
+                        if tweets['data'][tweet]['label'] == "?":
+                            tweets['data'][tweet]['label'] = label
 
     f = open("Data/Tweets.json", 'w')
     f.write(json.dumps(tweets, indent=0, sort_keys=True))
