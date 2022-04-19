@@ -17,7 +17,7 @@ def main():
     #     time.sleep(1800)
     #
     # data.merge()  # Merge json tweet files
-    # data.rank()
+    data.rank()
 
     # label.split_convert()
     label.insert_labels()  # Finalize data

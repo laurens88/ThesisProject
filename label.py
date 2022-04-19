@@ -15,7 +15,7 @@ def split_convert():
 
     tweets = len(values['data'])
     for i in range(0, tweets):
-        if values['data'][i]['label'] == "?" and values['data'][i]['rank'] > 4:
+        if values['data'][i]['label'] == "?" and values['data'][i]['rank'] > 0:
             not_labeled.append(i)
 
     samples = random.choices(not_labeled, k=min(50, len(not_labeled)))
