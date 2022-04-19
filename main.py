@@ -20,9 +20,10 @@ def main():
     # data.rank()
 
     # label.split_convert()
-    label.insert_labels()  # Finalize data
-    label.count_labels()
+    # label.insert_labels()  # Finalize data
+    # label.count_labels()
     #data.rank_distribution()
+    data.split_classes()
 
 
 if __name__ == '__main__':

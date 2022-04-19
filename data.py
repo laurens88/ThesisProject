@@ -188,3 +188,21 @@ def rank_distribution():
               f"{distribution.pop(str(min([int(x) for x in distribution.keys()])))} times.")
         rank_index += 1
 
+
+def split_classes():
+    jsonfile = open('Data/Tweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    tweets = []
+
+    for tweet in values['data']:
+        label = tweet['label']
+        if label in ["Positive", "Neutral", "Negative"]:
+            tweets.append(tweet)
+
+    tweets = sorted(tweets, key=lambda x: x['label'])
+
+    f = open("LabeledData/LabeledTweets.json", 'w')
+    f.write(json.dumps(tweets, indent=0, sort_keys=True))
+    f.close()
