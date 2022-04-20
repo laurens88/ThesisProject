@@ -189,20 +189,24 @@ def rank_distribution():
         rank_index += 1
 
 
-def split_classes():
+# Tweets and their respective label are stored in a json file for use by a model
+def prepare_data():
     jsonfile = open('Data/Tweets.json', 'r')
     values = json.load(jsonfile)
     jsonfile.close()
 
-    tweets = []
+    X = []
+    y = []
 
     for tweet in values['data']:
         label = tweet['label']
         if label in ["Positive", "Neutral", "Negative"]:
-            tweets.append(tweet)
+            X.append(tweet['text'])
+            y.append(label)
 
-    tweets = sorted(tweets, key=lambda x: x['label'])
-
+    data = {'X': X, 'y': y}
     f = open("LabeledData/LabeledTweets.json", 'w')
-    f.write(json.dumps(tweets, indent=0, sort_keys=True))
+    f.write(json.dumps(data, indent=0, sort_keys=True))
     f.close()
+
+    return data

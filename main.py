@@ -1,6 +1,7 @@
 #  Laurens de Bruin Radboud University s1002199
 import label
 import data
+import model
 import json
 import time
 import os
@@ -23,7 +24,11 @@ def main():
     # label.insert_labels()  # Finalize data
     # label.count_labels()
     #data.rank_distribution()
-    data.split_classes()
+    # data.split_classes()
+    model_input = data.prepare_data()
+    X = model_input['X']
+    y = model_input['y']
+    model.train_test_validate_split(X, y)
 
 
 if __name__ == '__main__':
