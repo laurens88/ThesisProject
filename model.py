@@ -20,4 +20,6 @@ def train_test_validate_split(dataX, dataY):
 
     print(x_train[0], y_train[0])
 
+    return x_train, x_test, x_val, y_train, y_test, y_val
+
 

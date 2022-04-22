@@ -2,6 +2,7 @@
 import label
 import data
 import model
+from Tokenizer import Tokenizer
 import json
 import time
 import os
@@ -23,12 +24,14 @@ def main():
     # label.split_convert()
     # label.insert_labels()  # Finalize data
     # label.count_labels()
-    #data.rank_distribution()
+    # data.rank_distribution()
     # data.split_classes()
     model_input = data.prepare_data()
     X = model_input['X']
     y = model_input['y']
-    model.train_test_validate_split(X, y)
+    x_train, x_test, x_val, y_train, y_test, y_val = model.train_test_validate_split(X, y)
+    t = Tokenizer(True)
+    print(list(Tokenizer.tokenize(t, x_train[0])))
 
 
 if __name__ == '__main__':
