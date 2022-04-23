@@ -28,7 +28,6 @@ def main():
     # data.rank_distribution()
     # data.split_classes()
 
-
     model_input = data.prepare_data()
     X = model_input['X']
     y = model_input['y']
@@ -36,8 +35,11 @@ def main():
     t = Tokenizer(True)
 
     print(x_train[0] + "\n")
-    print(list(Tokenizer.tokenize(t, x_train[0])))
-    print(y_train[0])
+    # print(list(Tokenizer.tokenize(t, x_train[0])))
+    # print(y_train[0])
+
+    print("-----------------------------------")
+    print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
 
 
 if __name__ == '__main__':
