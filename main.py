@@ -7,6 +7,7 @@ import json
 import time
 import os
 import datetime
+import emoji
 
 
 def main():
@@ -26,12 +27,17 @@ def main():
     # label.count_labels()
     # data.rank_distribution()
     # data.split_classes()
+
+
     model_input = data.prepare_data()
     X = model_input['X']
     y = model_input['y']
     x_train, x_test, x_val, y_train, y_test, y_val = model.train_test_validate_split(X, y)
     t = Tokenizer(True)
+
+    print(x_train[0] + "\n")
     print(list(Tokenizer.tokenize(t, x_train[0])))
+    print(y_train[0])
 
 
 if __name__ == '__main__':

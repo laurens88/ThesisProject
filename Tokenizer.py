@@ -85,19 +85,23 @@ regex_strings = (
       (?:            # (international)
         \+?[01]
         [\-\s.]*
-      )?            
+      )?
       (?:            # (area code)
         [\(]?
         \d{3}
         [\-\s.\)]*
-      )?    
+      )?
       \d{3}          # exchange
-      [\-\s.]*   
+      [\-\s.]*
       \d{4}          # base
     )"""
     ,
     # Emoticons:
     emoticon_string
+
+    ,
+    # URLs
+    r"""http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"""
     ,
     # HTML tags:
     r"""<[^>]+>"""
@@ -107,7 +111,24 @@ regex_strings = (
 
     ,
     # Twitter cashtags
-    r"""(?:\$+[\w_]+[\w\'_\-]*[\w_]+)"""
+    r"""(?:\$[a-zA-Z]+)"""
+    ,
+
+    # Percentages
+    r"""(?:[+|-]*\d+[,|.]?\d*[,|.]?\d*\%)"""
+
+    ,
+    # Prices in $42k, 42K  format
+    r"""(?:\$?\d+[,|.]?\d*[k|K])"""
+
+    ,
+    # Prices (starting or ending with a dollar sign)
+    r"""(?:\$?\d+[,|.]?\d*[,|.]?\d*[,|.]?\d*[,|.]?\d*\$?)"""
+
+    ,
+    # Tokens indicating time periods
+    r"""(?:\d+[d|D|h|H])"""
+
     ,
     # Twitter hashtags:
     r"""(?:\#+[\w_]+[\w\'_\-]*[\w_]+)"""
