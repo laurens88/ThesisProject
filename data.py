@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import os
 from difflib import SequenceMatcher
+from sklearn.model_selection import train_test_split
 
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAMINZgEAAAAA5x%2Fnm4e%2FYuAaae1N1b7F7czW%2FN8" \
                "%3Dq5K6FTJGdugV5loBhz7iyt2zTgE2nCR4rYUSYoDsdRNZtBgu49"
@@ -210,3 +211,21 @@ def prepare_data():
     f.close()
 
     return data
+
+
+# Split tweet data corresponding labels into train test and validation sets.
+def train_test_validate_split(data_x, data_y):
+    train_ratio = 0.70
+    validation_ratio = 0.15
+    test_ratio = 0.15
+
+    # train is now 70% of the entire data set
+    x_train, x_test, y_train, y_test = train_test_split(data_x, data_y,
+                                                        test_size=int((len(data_x)) * test_ratio * 2), stratify=data_y)
+
+    # test is now 15% of the initial data set
+    # validation is now 15% of the initial data set
+    x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
+                                                    test_size=int((len(data_x)) * test_ratio), stratify=y_test)
+
+    return x_train, x_test, x_val, y_train, y_test, y_val
