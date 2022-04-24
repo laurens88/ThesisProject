@@ -1,6 +1,15 @@
 import spacy
+import wordsegment
+import wordsegment
 
-sp = spacy.load('en_core_web_sm')
+global sp
+
+
+def set_up():
+    sp = spacy.load('en_core_web_sm')
+    wordsegment.load()
+    wordsegment.UNIGRAMS['bitcoin'] = 9e10
+    wordsegment.UNIGRAMS['ath'] = 1.3e7
 
 
 def pos_tagging(sentence):
@@ -8,3 +17,10 @@ def pos_tagging(sentence):
         sen = sp(token)
         for w in sen:
             print(sen, w, spacy.explain(w.tag_))
+
+
+def segment_text(tweet):
+    print(wordsegment.segment(tweet))
+
+# set_up()
+# print(segment("thisisatest"))
