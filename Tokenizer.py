@@ -205,7 +205,7 @@ class Tokenizer:
                     pass
         # Now the alpha versions:
         ents = set(html_entity_alpha_re.findall(string))
-        ents = filter((lambda x : x != amp), ents)
+        ents = filter((lambda x: x != amp), ents)
         for ent in ents:
             entname = ent[1:-1]
             try:
