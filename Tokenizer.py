@@ -69,36 +69,20 @@ emoticon_string = r"""
       [<>]?
       [:;=8]                     # eyes
       [\-o\*\']?                 # optional nose
-      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth      
-      |
-      [\)\]\(\[dDpP/\:\}\{@\|\\] # mouth
-      [\-o\*\']?                 # optional nose
-      [:;=8]                     # eyes
-      [<>]?
+      [\)\]\(\[/\:\}\{@\|\\] # mouth
     )"""
 
 # The components of the tokenizer:
 regex_strings = (
-    # Phone numbers:
-    r"""
-    (?:
-      (?:            # (international)
-        \+?[01]
-        [\-\s.]*
-      )?
-      (?:            # (area code)
-        [\(]?
-        \d{3}
-        [\-\s.\)]*
-      )?
-      \d{3}          # exchange
-      [\-\s.]*
-      \d{4}          # base
-    )"""
-    ,
     # Emoticons:
     emoticon_string
+    ,
+    # Dates
+    r"""(?:\d+[\/|-]\d+[\/|-]\d+)"""
 
+    ,
+    # Time in hh:mm(:ss) format
+    r"""(?:\d+:\d+:?\d{0,2})"""
     ,
     # URLs
     r"""http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"""
@@ -126,8 +110,12 @@ regex_strings = (
     r"""(?:\$?\d+[,|.]?\d*[,|.]?\d*[,|.]?\d*[,|.]?\d*\$?)"""
 
     ,
-    # Tokens indicating time periods
-    r"""(?:\d+[d|D|h|H])"""
+    # Time in hh:mm(:ss) format
+    r"""(?:\d+:\d+:?\d{0,2})"""
+
+    ,
+    # Dates
+    r"""(?:\d+[\/|-]\d+[\/|-]\d+)"""
 
     ,
     # Twitter hashtags:
