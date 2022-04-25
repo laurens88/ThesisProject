@@ -53,7 +53,6 @@ def main():
                 hashtags.append(word)
                 Preprocessor.segment_text(word)
 
-    # Preprocessor.segment_text("#ilovebitcoin")
 
 if __name__ == '__main__':
     main()
