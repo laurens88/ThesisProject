@@ -46,7 +46,14 @@ def main():
     # Preprocessor.pos_tagging(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
 
     Preprocessor.set_up()
-    Preprocessor.segment_text("#ilovebitcoin")
+    hashtags = []
+    for tweet in X:
+        for word in tweet.split():
+            if word[0] == '#':
+                hashtags.append(word)
+                Preprocessor.segment_text(word)
+
+    # Preprocessor.segment_text("#ilovebitcoin")
 
 if __name__ == '__main__':
     main()
