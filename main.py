@@ -42,8 +42,10 @@ def main():
     # print("-----------------------------------")
     # print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
 
-    print(x_train[0], "\n")
-    print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
+    for i in range(5):
+        print(x_train[i], "\n")
+        print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[i]))))
+        print("-----------------------------------------------------")
     # Preprocessor.pos_tagging(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
 
     # Preprocessor.set_up()

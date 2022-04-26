@@ -25,6 +25,7 @@ def set_up():
     wordsegment.UNIGRAMS['ai'] = 5e8
     wordsegment.UNIGRAMS['nft'] = 2.8e8
     wordsegment.UNIGRAMS['inu'] = 1e8
+    wordsegment.UNIGRAMS['htf'] = 1e6
 
 
 def pos_tagging(sentence):
