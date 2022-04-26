@@ -167,7 +167,7 @@ class Tokenizer:
             string = str(string).encode('string_escape')
             string = str(string)
         # Fix HTML character entitites:
-        string = self.__html2unicode(string)
+        string = self.html2unicode(string)
         # Tokenize:
         words = word_re.findall(string)
         # Possible alter the case, but avoid changing emoticons like :D into :d:
@@ -175,8 +175,7 @@ class Tokenizer:
             words = map((lambda x: x if emoticon_re.search(x) else x.lower()), words)
         return words
 
-
-    def __html2unicode(self, string):
+    def html2unicode(self, string):
         """
         Internal metod that seeks to replace all the HTML entities in
         s with their corresponding unicode characters.

@@ -33,6 +33,10 @@ def main():
     X = model_input['X']
     y = model_input['y']
     x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(X, y)
+    x_train = Preprocessor.normalize_text(x_train)
+    x_test = Preprocessor.normalize_text(x_test)
+    x_val = Preprocessor.normalize_text(x_val)
+
     t = Tokenizer(True)
 
     # print(x_train[0] + "\n")
@@ -41,11 +45,11 @@ def main():
     #
     # print("-----------------------------------")
     # print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
-
-    for i in range(5):
-        print(x_train[i], "\n")
-        print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[i]))))
-        print("-----------------------------------------------------")
+    # print(list(map(emoji.demojize, Tokenizer.tokenize(t, test))))
+    # for i in range(5):
+    #     print(x_train[i], "\n")
+    #     print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[i]))))
+    #     print("-----------------------------------------------------")
     # Preprocessor.pos_tagging(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
 
     # Preprocessor.set_up()

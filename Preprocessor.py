@@ -1,6 +1,8 @@
 import spacy
 import wordsegment
 import wordsegment
+import re
+import html.entities
 
 global sp
 
@@ -26,6 +28,35 @@ def set_up():
     wordsegment.UNIGRAMS['nft'] = 2.8e8
     wordsegment.UNIGRAMS['inu'] = 1e8
     wordsegment.UNIGRAMS['htf'] = 1e6
+
+
+def normalize_text(X):
+    html_entity_digit_re = re.compile(r"&#\d+;")
+    html_entity_alpha_re = re.compile(r"&\w+;")
+    amp = "&amp;"
+
+    for i in range(len(X)):
+        # First the digits:
+        ents = set(html_entity_digit_re.findall(X[i]))
+        if len(ents) > 0:
+            for ent in ents:
+                entnum = ent[2:-1]
+                try:
+                    entnum = int(entnum)
+                    X[i] = X[i].replace(ent, chr(entnum))
+                except:
+                    pass
+        # Now the alpha versions:
+        ents = set(html_entity_alpha_re.findall(X[i]))
+        ents = filter((lambda x: x != amp), ents)
+        for ent in ents:
+            entname = ent[1:-1]
+            try:
+                X[i] = X[i].replace(ent, chr(html.entities.name2codepoint[entname]))
+            except:
+                pass
+            X[i] = X[i].replace(amp, " and ")
+    return X
 
 
 def pos_tagging(sentence):
