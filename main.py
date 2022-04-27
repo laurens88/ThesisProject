@@ -37,28 +37,12 @@ def main():
     x_test = Preprocessor.normalize_text(x_test)
     x_val = Preprocessor.normalize_text(x_val)
 
+    # At this point the data is going to be split into two versions for the two models
+
     t = Tokenizer(True)
 
-    # print(x_train[0] + "\n")
-    # # print(list(Tokenizer.tokenize(t, x_train[0])))
-    # # print(y_train[0])
-    #
-    # print("-----------------------------------")
-    # print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
-    # print(list(map(emoji.demojize, Tokenizer.tokenize(t, test))))
-    # for i in range(5):
-    #     print(x_train[i], "\n")
-    #     print(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[i]))))
-    #     print("-----------------------------------------------------")
-    # Preprocessor.pos_tagging(list(map(emoji.demojize, Tokenizer.tokenize(t, x_train[0]))))
+    print(model.bert_tokenize("I love you"))
 
-    # Preprocessor.set_up()
-    # hashtags = []
-    # for tweet in X:
-    #     for word in tweet.split():
-    #         if word[0] == '#':
-    #             hashtags.append(word)
-    #             Preprocessor.segment_text(word)
 
 
 if __name__ == '__main__':
