@@ -41,7 +41,7 @@ def main():
 
     t = Tokenizer(True)
 
-    print(model.bert_tokenize("I love you"))
+    print(model.classify())
 
 
 
