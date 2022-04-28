@@ -41,7 +41,14 @@ def main():
 
     t = Tokenizer(True)
 
-    print(model.classify())
+
+    tweets = x_train[:5]
+    labels = y_train[:5]
+    for i in range(5):
+        print(tweets[i], labels[i])
+        print("---------------------")
+    output = model.classify(tweets)
+    print(output)
 
 
 
