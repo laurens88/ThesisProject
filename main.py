@@ -42,13 +42,7 @@ def main():
     t = Tokenizer(True)
 
 
-    tweets = x_train[:5]
-    labels = y_train[:5]
-    for i in range(5):
-        print(tweets[i], labels[i])
-        print("---------------------")
-    output = model.classify(tweets)
-    print(output)
+    print(model.classify(["I ❤ bitcoin", "I love bitcoin"]))
 
 
 
