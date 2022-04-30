@@ -3,6 +3,7 @@ import wordsegment
 import wordsegment
 import re
 import html.entities
+from PosTagger import PosTagger
 
 global sp
 
@@ -64,6 +65,11 @@ def pos_tagging(sentence):
         sen = sp(token)
         for w in sen:
             print(sen, w, spacy.explain(w.tag_))
+
+
+def viterbi_pos_tagging():
+    pt = PosTagger()
+    PosTagger.tag(pt)
 
 
 def segment_text(tweet):

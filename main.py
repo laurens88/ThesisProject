@@ -41,8 +41,10 @@ def main():
 
     t = Tokenizer(True)
 
+    Preprocessor.viterbi_pos_tagging()
 
-    print(model.classify(["I ❤ bitcoin", "I love bitcoin"]))
+
+    #print(model.classify(["I ❤ bitcoin", "I love bitcoin"]))
 
 
 

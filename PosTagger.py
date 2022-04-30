@@ -5,11 +5,16 @@ from nltk.corpus.reader import TaggedCorpusReader
 from collections import defaultdict
 
 
-class pos_tagger():
+def clean(word):
+    word = re.sub('\s+', '', word.lower())
+    return word
+
+
+class PosTagger():
 
     def __init__(self):
         self.unknown_prob = 0.0000000000001
-        self.tagged_file = glob.glob("brown/*")
+        self.tagged_file = glob.glob("test.txt")
         self.bigram_cnt = {}
         self.unigram_cnt = {}
         self.tag_count = defaultdict(lambda: 0)
@@ -47,13 +52,13 @@ class pos_tagger():
                 self.tag_word_count[(tag, word)] = 1
         return self.tag_word_count
 
-    def transition_probabilty(self, tags):
+    def transition_probability(self, tags):
         bigrams = self.ngrams(tags, 2)
         for bigram in bigrams:
             self.transition_probabilities[bigram] = self.bigram_cnt[bigram] / self.unigram_cnt[bigram[0]]
         return self.transition_probabilities
 
-    def emmission_probabilty(self, tagged_words):
+    def emmission_probability(self, tagged_words):
         for tag, word in tagged_words:
             self.emmission_probabilities[tag, word] = self.tag_word_count[tag, word] / self.tag_count[tag]
         return self.emmission_probabilities
@@ -61,7 +66,7 @@ class pos_tagger():
     def initial_probabilities(self, tag):
         return self.transition_probabilities["START", tag]
 
-    def vertibi(self, observable, in_states):
+    def viterbi(self, observable, in_states):
         states = set(in_states)
         states.remove("START")
         states.remove("END")
@@ -83,10 +88,6 @@ class pos_tagger():
             print(str(x[0]) + "," + str(x[1]))
         return best_path
 
-    def clean(self, word):
-        word = re.sub('\s+', '', word.lower())
-        return word
-
     def tag_test(self, all_tags):
         words = []
         with open("tag_test.txt") as f:
@@ -95,24 +96,24 @@ class pos_tagger():
                     words = []
                     print(line)
                 elif "<EOS>" in line:
-                    self.vertibi([self.clean(w) for w in words], all_tags)
+                    self.viterbi([clean(w) for w in words], all_tags)
                     print("<EOS>")
                 else:
                     words.append(line)
 
     def tag(self):
-        reader_corpus = TaggedCorpusReader('.',
-                                           self.tagged_file)
+        reader_corpus = TaggedCorpusReader('.', self.tagged_file)
 
         tagged_words = []
         all_tags = []
         for sent in reader_corpus.tagged_sents():  # get tagged sentences
+            print(sent)
             all_tags.append("START")
-            for (word, tag) in sent:
+            for word, tag in sent:
                 if tag is None or tag in ['NIL']:
                     continue
                 all_tags.append(tag)
-                word = self.clean(word)
+                word = clean(word)
                 tagged_words.append((tag, word))
             all_tags.append("END")
 
@@ -121,11 +122,8 @@ class pos_tagger():
         self.bigram_cnt = self.bigram_counts(all_tags)
         self.unigram_cnt = self.unigram_counts(all_tags)
 
-        self.transition_probabilty(all_tags)
-        self.emmission_probabilty(tagged_words)
+        self.transition_probability(all_tags)
+        self.emmission_probability(tagged_words)
 
-        self.tag_test(all_tags)
+        # self.tag_test(all_tags)
 
-
-ps = pos_tagger()
-print(ps.tag())
