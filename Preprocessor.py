@@ -72,6 +72,14 @@ def viterbi_pos_tagging():
     PosTagger.tag(pt)
 
 
+def segment_hashtags(tweet):
+    for word in tweet.split():
+        if word[0] == '#':
+            print(word)
+            print(segment_text(word))
+
+
+
 def segment_text(tweet):
     print(wordsegment.segment(tweet))
 

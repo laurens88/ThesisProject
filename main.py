@@ -41,7 +41,10 @@ def main():
 
     t = Tokenizer(True)
 
-    Preprocessor.viterbi_pos_tagging()
+    Preprocessor.segment_hashtags(x_train[0])
+    #Preprocessor.viterbi_pos_tagging()
+    # print("Sentiment-aware tokenizer: ", Tokenizer.tokenize(t, "I like bitcoin"))
+    # print("Bert tokenizer ", model.bert_tokenize("I like bitcoin"))
 
 
     #print(model.classify(["I ❤ bitcoin", "I love bitcoin"]))
