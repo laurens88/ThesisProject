@@ -79,9 +79,11 @@ def segment_hashtags(tweet):
     transformed_tweet = ""
     for word in tweet.split():
         if word[0] == '#':
-            transformed_tweet = transformed_tweet + segment_text(word)
+            segments = segment_text(word)
+            for x in segments:
+                transformed_tweet = transformed_tweet + " " + x
         else:
-            transformed_tweet = transformed_tweet + word
+            transformed_tweet = transformed_tweet + " " + word
     print(transformed_tweet)
 
 
