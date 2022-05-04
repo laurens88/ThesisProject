@@ -12,8 +12,10 @@ def set_up():
     sp = spacy.load('en_core_web_sm')
     wordsegment.load()
     wordsegment.UNIGRAMS['bitcoin'] = 9e10
+    wordsegment.UNIGRAMS['btc'] = 9e10
     wordsegment.UNIGRAMS['ath'] = 1.3e7
     wordsegment.UNIGRAMS['ethereum'] = 2e8
+    wordsegment.UNIGRAMS['eth'] = 2e8
     wordsegment.UNIGRAMS['cryptocurrency'] = 3e8
     wordsegment.UNIGRAMS['blockchain'] = 3.2e8
     wordsegment.UNIGRAMS['altcoin'] = 5e6
@@ -29,6 +31,7 @@ def set_up():
     wordsegment.UNIGRAMS['nft'] = 2.8e8
     wordsegment.UNIGRAMS['inu'] = 1e8
     wordsegment.UNIGRAMS['htf'] = 1e6
+    wordsegment.UNIGRAMS['bnb'] = 1e6
 
 
 def normalize_text(X):
@@ -73,15 +76,17 @@ def viterbi_pos_tagging():
 
 
 def segment_hashtags(tweet):
+    transformed_tweet = ""
     for word in tweet.split():
         if word[0] == '#':
-            print(word)
-            print(segment_text(word))
-
+            transformed_tweet = transformed_tweet + segment_text(word)
+        else:
+            transformed_tweet = transformed_tweet + word
+    print(transformed_tweet)
 
 
 def segment_text(tweet):
-    print(wordsegment.segment(tweet))
+    return wordsegment.segment(tweet)
 
 # set_up()
 # print(segment("thisisatest"))
