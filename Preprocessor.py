@@ -5,7 +5,7 @@ import re
 import html.entities
 from PosTagger import PosTagger
 import emoji
-from textblob import Word
+from textblob import TextBlob
 
 global sp
 
@@ -123,9 +123,8 @@ def translate_abbreviations(tweet):
 
 
 def spelling_correction(tweet):
-    for word in tweet.split():
-        word2correct = Word(word)
-        print(word2correct.correct())
+    sentence = TextBlob(tweet)
+    print(sentence.correct())
 
 
 # set_up()

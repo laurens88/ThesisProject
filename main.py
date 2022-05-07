@@ -40,7 +40,7 @@ def main():
     # At this point the data is going to be split into two versions for the two models
 
     t = Tokenizer(True)
-    Preprocessor.spelling_correction("I like appples")
+    Preprocessor.spelling_correction("I like bitcion")
 
     # Preprocessor.set_up()
     # raw_tweet = x_train[0]
