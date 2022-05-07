@@ -4,7 +4,6 @@ from transformers import pipeline, BertTokenizer
 
 def classify(tweets):
     sentiment_pipeline = pipeline(task="sentiment-analysis", model="finiteautomata/bertweet-base-sentiment-analysis")
-    print(tweets)
     return sentiment_pipeline(tweets)
 
 

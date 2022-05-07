@@ -4,6 +4,7 @@ import wordsegment
 import re
 import html.entities
 from PosTagger import PosTagger
+import emoji
 
 global sp
 
@@ -31,36 +32,20 @@ def set_up():
     wordsegment.UNIGRAMS['nft'] = 2.8e8
     wordsegment.UNIGRAMS['inu'] = 1e8
     wordsegment.UNIGRAMS['htf'] = 1e6
+    wordsegment.UNIGRAMS['ltf'] = 1e6
     wordsegment.UNIGRAMS['bnb'] = 1e6
+    wordsegment.UNIGRAMS['ta'] = 2e5
 
 
-def normalize_text(X):
-    html_entity_digit_re = re.compile(r"&#\d+;")
-    html_entity_alpha_re = re.compile(r"&\w+;")
-    amp = "&amp;"
+def normalize_text(tweets):
+    rep = {" &amp; ": " & ",
+           " &gt; ": " > ",
+           " &lt; ": " <announcement> "}
 
-    for i in range(len(X)):
-        # First the digits:
-        ents = set(html_entity_digit_re.findall(X[i]))
-        if len(ents) > 0:
-            for ent in ents:
-                entnum = ent[2:-1]
-                try:
-                    entnum = int(entnum)
-                    X[i] = X[i].replace(ent, chr(entnum))
-                except:
-                    pass
-        # Now the alpha versions:
-        ents = set(html_entity_alpha_re.findall(X[i]))
-        ents = filter((lambda x: x != amp), ents)
-        for ent in ents:
-            entname = ent[1:-1]
-            try:
-                X[i] = X[i].replace(ent, chr(html.entities.name2codepoint[entname]))
-            except:
-                pass
-            X[i] = X[i].replace(amp, " and ")
-    return X
+    rep = dict((re.escape(k), v) for k, v in rep.items())
+    pattern = re.compile("|".join(rep.keys()))
+    translated_tweets = [pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower()) for tweet in tweets]
+    return translated_tweets
 
 
 def pos_tagging(sentence):
@@ -84,11 +69,57 @@ def segment_hashtags(tweet):
                 transformed_tweet = transformed_tweet + " " + x
         else:
             transformed_tweet = transformed_tweet + " " + word
-    print(transformed_tweet)
+    return transformed_tweet
 
 
 def segment_text(tweet):
     return wordsegment.segment(tweet)
+
+
+def remove_mentions(tweet):
+    clean_tweet = ""
+    for word in tweet.split():
+        if word[0] != '@':
+            clean_tweet = clean_tweet + " " + word
+    return clean_tweet
+
+
+def translate_emojis(tweet):
+    if not emoji.emoji_lis(tweet):
+        return tweet
+    else:
+        clean_tweet = ""
+        for word in tweet.split():
+            emoji_locations = [e['location'] for e in emoji.emoji_lis(word)]
+            if emoji_locations:
+                for index in range(len(word)):
+                    if index in emoji_locations:
+                        translation = emoji.demojize(word[index])
+                        clean_tweet = clean_tweet + " " + translation[1:-1].replace("_", " ") + " "
+                    else:
+                        clean_tweet = clean_tweet + word[index]
+            else:
+                clean_tweet = clean_tweet + " " + word + " "
+    return clean_tweet.replace("  ", " ")
+
+
+def translate_abbreviations(tweet):
+    rep = {" ath ": " all time high ",
+           " hodl ": " hold on for dear life ",
+           " htf ": " higher time frame ",
+           " ltf ": " lower time frame ",
+           " btc ": " bitcoin ",
+           " ada ": " cardano ",
+           " eth ": " ethereum ",
+           " usdt ": " tether ",
+           " ta ": " technical analysis ",
+           " ann ": " announcement "}
+
+    rep = dict((re.escape(k), v) for k, v in rep.items())
+    pattern = re.compile("|".join(rep.keys()))
+    translated_tweet = pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower())
+    return translated_tweet
+
 
 # set_up()
 # print(segment("thisisatest"))

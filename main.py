@@ -41,15 +41,15 @@ def main():
 
     t = Tokenizer(True)
 
-    # Preprocessor.set_up()
-    # print(x_train[0])
-    # Preprocessor.segment_hashtags(x_train[0])
-    #Preprocessor.viterbi_pos_tagging()
-    # print("Sentiment-aware tokenizer: ", Tokenizer.tokenize(t, "I like bitcoin"))
-    # print("Bert tokenizer ", model.bert_tokenize("I like bitcoin"))
-
-
-    print(model.classify(["I hate you", "I love you", "Bitcoin is a currency"]))
+    Preprocessor.set_up()
+    raw_tweet = x_train[0]
+    print("Raw: ", raw_tweet)
+    clean_tweet = Preprocessor.translate_abbreviations(
+        Preprocessor.translate_emojis(
+            Preprocessor.segment_hashtags(
+                Preprocessor.remove_mentions(x_train[0]))))
+    print("Processed :", clean_tweet)
+    print(model.classify([raw_tweet, clean_tweet]))
 
 
 
