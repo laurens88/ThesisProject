@@ -1,4 +1,5 @@
 import spacy
+import textblob
 import wordsegment
 import wordsegment
 import re
@@ -36,6 +37,7 @@ def set_up():
     wordsegment.UNIGRAMS['ltf'] = 1e6
     wordsegment.UNIGRAMS['bnb'] = 1e6
     wordsegment.UNIGRAMS['ta'] = 2e5
+    wordsegment.UNIGRAMS['defi'] = 2e8
 
 
 def normalize_text(tweets):
@@ -104,7 +106,7 @@ def translate_emojis(tweet):
     return clean_tweet.replace("  ", " ")
 
 
-def translate_abbreviations(tweet):
+def translate_abbreviations_slang(tweet):
     rep = {" ath ": " all time high ",
            " hodl ": " hold on for dear life ",
            " htf ": " higher time frame ",
@@ -114,7 +116,20 @@ def translate_abbreviations(tweet):
            " eth ": " ethereum ",
            " usdt ": " tether ",
            " ta ": " technical analysis ",
-           " ann ": " announcement "}
+           " ann ": " announcement ",
+           " avg ": " average ",
+           " apr ": " april ",
+           " bpi ": " bitcoin price index ",
+           " bro ": " brother ",
+           " cmon ": " come on ",
+           " Im ": " I'm ",
+           " macd ": " moving average convergence divergence indicator",
+           " stfu ": " shut the fuck up",
+           " wtf ": " what the fuck ",
+           " mfs ": " motherfuckers ",
+           " ur ": " your ",
+           " af ": " as fuck ",
+           " algo ": " algorithm "}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
@@ -123,8 +138,7 @@ def translate_abbreviations(tweet):
 
 
 def spelling_correction(tweet):
-    sentence = TextBlob(tweet)
-    print(sentence.correct())
+    return TextBlob(tweet).correct()
 
 
 # set_up()

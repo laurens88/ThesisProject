@@ -190,6 +190,32 @@ def rank_distribution():
         rank_index += 1
 
 
+def word_occurences():
+    dictionary = open('../venv/Lib/site-packages/textblob/en/en-spelling.txt', 'r')
+    known_words = [word.split()[0] for word in dictionary.readlines()]
+
+    jsonfile = open('LabeledData/LabeledTweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    unigram = {}
+    tweet_number = 0
+    for tweet in values['X']:
+        for word in tweet.split():
+            if word.isalpha() and word.lower() not in known_words:
+                if word in unigram.keys():
+                    unigram[word] += 15
+                else:
+                    unigram[word] = 10
+        tweet_number += 1
+
+    f = open("Data/crypto_unigram.txt", 'w')
+    for k, v in unigram.items():
+        f.write(k + " " + str(v) + "\n")
+    # f.write(json.dumps(unigram, indent=0, sort_keys=True))
+    f.close()
+
+
 # Tweets and their respective label are stored in a json file for use by a model
 def prepare_data():
     jsonfile = open('Data/Tweets.json', 'r')
