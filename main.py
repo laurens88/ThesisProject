@@ -40,16 +40,17 @@ def main():
     # At this point the data is going to be split into two versions for the two models
 
     t = Tokenizer(True)
+    Preprocessor.spelling_correction("I like appples")
 
-    Preprocessor.set_up()
-    raw_tweet = x_train[0]
-    print("Raw: ", raw_tweet)
-    clean_tweet = Preprocessor.translate_abbreviations(
-        Preprocessor.translate_emojis(
-            Preprocessor.segment_hashtags(
-                Preprocessor.remove_mentions(x_train[0]))))
-    print("Processed :", clean_tweet)
-    print(model.classify([raw_tweet, clean_tweet]))
+    # Preprocessor.set_up()
+    # raw_tweet = x_train[0]
+    # print("Raw: ", raw_tweet)
+    # clean_tweet = Preprocessor.translate_abbreviations(
+    #     Preprocessor.translate_emojis(
+    #         Preprocessor.segment_hashtags(
+    #             Preprocessor.remove_mentions(x_train[0]))))
+    # print("Processed :", clean_tweet)
+    # print(model.classify([raw_tweet, clean_tweet]))
 
 
 

@@ -5,6 +5,7 @@ import re
 import html.entities
 from PosTagger import PosTagger
 import emoji
+from textblob import Word
 
 global sp
 
@@ -119,6 +120,12 @@ def translate_abbreviations(tweet):
     pattern = re.compile("|".join(rep.keys()))
     translated_tweet = pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower())
     return translated_tweet
+
+
+def spelling_correction(tweet):
+    for word in tweet.split():
+        word2correct = Word(word)
+        print(word2correct.correct())
 
 
 # set_up()
