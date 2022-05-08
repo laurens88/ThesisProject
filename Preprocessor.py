@@ -66,13 +66,17 @@ def viterbi_pos_tagging():
 def segment_hashtags(tweet):
     transformed_tweet = ""
     for word in tweet.split():
-        if word[0] == '#':
+        if word[0] == '#' or (word[0] == '$' and not has_numbers(word)):
             segments = segment_text(word)
             for x in segments:
                 transformed_tweet = transformed_tweet + " " + x
         else:
             transformed_tweet = transformed_tweet + " " + word
     return transformed_tweet
+
+
+def has_numbers(text):
+    return any(char.isdigit() for char in text)
 
 
 def segment_text(tweet):
@@ -130,7 +134,9 @@ def translate_abbreviations_slang(tweet):
            " ur ": " your ",
            " af ": " as fuck ",
            " algo ": " algorithm ",
-           " doge ": " dogecoin "}
+           " doge ": " dogecoin ",
+           " bnb ": " binance ",
+           " uber ": " very "}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
