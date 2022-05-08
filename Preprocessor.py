@@ -7,6 +7,7 @@ import html.entities
 from PosTagger import PosTagger
 import emoji
 from textblob import TextBlob
+import json
 
 global sp
 
@@ -168,14 +169,31 @@ def translate_abbreviations_slang(tweet):
 
 
 def spelling_correction(tweet):
-    # return tweet
-    # # words = tweet.split()
-    # # for word in words:
-    # #     test = TextBlob(word).tags
-    # #     print(test)
-
     return TextBlob(tweet).correct()
 
 
 def correct_spacing(tweet):
     return tweet.replace("_", " ")
+
+
+def process_data():
+    jsonfile = open('LabeledData/LabeledTweets.json', 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    X = values['X']
+    y = values['y']
+
+    x_clean = [correct_spacing(
+            translate_abbreviations_slang(
+                segment_hashtags(
+                    translate_emojis(
+                        remove_mentions(tweet))))) for tweet in X]
+
+    data = {'X': x_clean, 'y': y}
+
+    f = open("LabeledData/LabeledProcessedTweets.json", 'w')
+    f.write(json.dumps(data, indent=0, sort_keys=True))
+    f.close()
+
+

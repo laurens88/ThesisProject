@@ -30,29 +30,27 @@ def main():
     # data.split_classes()
 
     model_input = data.prepare_data()
-    X = model_input['X']
+    X = Preprocessor.normalize_text(model_input['X'])
     y = model_input['y']
     x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(X, y)
-    x_train = Preprocessor.normalize_text(x_train)
-    x_test = Preprocessor.normalize_text(x_test)
-    x_val = Preprocessor.normalize_text(x_val)
 
     # At this point the data is going to be split into two versions for the two models
 
     t = Tokenizer(True)
 
     Preprocessor.set_up()
-    raw_tweet = x_train[0]
-    print("Raw: ", raw_tweet)
-    clean_tweet = Preprocessor.correct_spacing(
-        str(Preprocessor.spelling_correction(
-            Preprocessor.translate_abbreviations_slang(
-                Preprocessor.segment_hashtags(
-                    Preprocessor.translate_emojis(
-                        Preprocessor.remove_mentions(raw_tweet)))))))
-    print("|||||||||||||||||||||||||||||||||||||||||||")
-    print("Processed :", clean_tweet)
-    print(model.classify([raw_tweet, clean_tweet]))
+    Preprocessor.process_data()
+    # raw_tweet = x_train[0]
+    # print("Raw: ", raw_tweet)
+    # clean_tweet = Preprocessor.correct_spacing(
+    #     str(Preprocessor.spelling_correction(
+    #         Preprocessor.translate_abbreviations_slang(
+    #             Preprocessor.segment_hashtags(
+    #                 Preprocessor.translate_emojis(
+    #                     Preprocessor.remove_mentions(raw_tweet)))))))
+    # print("|||||||||||||||||||||||||||||||||||||||||||")
+    # print("Processed :", clean_tweet)
+    # print(model.classify([raw_tweet, clean_tweet]))
 
 
 if __name__ == '__main__':
