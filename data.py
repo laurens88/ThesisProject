@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 from difflib import SequenceMatcher
 from sklearn.model_selection import train_test_split
+import Preprocessor
 
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAMINZgEAAAAA5x%2Fnm4e%2FYuAaae1N1b7F7czW%2FN8" \
                "%3Dq5K6FTJGdugV5loBhz7iyt2zTgE2nCR4rYUSYoDsdRNZtBgu49"
@@ -231,7 +232,7 @@ def prepare_data():
             X.append(tweet['text'])
             y.append(label)
 
-    data = {'X': X, 'y': y}
+    data = {'X': Preprocessor.normalize_text(X), 'y': y}
     f = open("LabeledData/LabeledTweets.json", 'w')
     f.write(json.dumps(data, indent=0, sort_keys=True))
     f.close()

@@ -44,7 +44,13 @@ def set_up():
 def normalize_text(tweets):
     rep = {" &amp; ": " & ",
            " &gt; ": " > ",
-           " &lt; ": " <announcement> "}
+           " &lt; ": " < ",
+           "\u2026": "...",
+           "\u00a3": "£",
+           "\ufe0f": " ",
+           "\u2013": "-",
+           "\u201c": "“",
+           "\u201d": "”"}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
@@ -184,11 +190,11 @@ def process_data():
     X = values['X']
     y = values['y']
 
-    x_clean = [correct_spacing(
-            translate_abbreviations_slang(
-                segment_hashtags(
-                    translate_emojis(
-                        remove_mentions(tweet))))) for tweet in X]
+    x_clean = normalize_text([correct_spacing(
+                translate_abbreviations_slang(
+                    segment_hashtags(
+                        translate_emojis(
+                            remove_mentions(tweet))))) for tweet in X])
 
     data = {'X': x_clean, 'y': y}
 
