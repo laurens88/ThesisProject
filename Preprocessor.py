@@ -50,7 +50,9 @@ def normalize_text(tweets):
            "\ufe0f": " ",
            "\u2013": "-",
            "\u201c": "“",
-           "\u201d": "”"}
+           "\u201d": "”",
+           "\u2019": "'",
+           "\u20bf": "₿"}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
