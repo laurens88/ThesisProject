@@ -42,16 +42,18 @@ def main():
     t = Tokenizer(True)
 
     Preprocessor.set_up()
-    raw_tweet = x_train[0]
+    raw_tweet = "We lost the $44.6k 44k  56k  89k 1k level. #BTC"#x_train[0]
     print("Raw: ", raw_tweet)
-    clean_tweet = str(Preprocessor.spelling_correction(
-        Preprocessor.translate_abbreviations_slang(
-            Preprocessor.translate_emojis(
-                Preprocessor.segment_hashtags(
-                    Preprocessor.remove_mentions(x_train[0]))))))
-    print("|||||||||||||||||||||||||||||||||||||||||||")
-    print("Processed :", clean_tweet)
-    print(model.classify([raw_tweet, clean_tweet]))
+    print(str(Preprocessor.spelling_correction(Preprocessor.translate_abbreviations_slang(raw_tweet))))
+    # clean_tweet = Preprocessor.correct_spacing(
+    #     str(Preprocessor.spelling_correction(
+    #         Preprocessor.translate_abbreviations_slang(
+    #             Preprocessor.translate_emojis(
+    #                 Preprocessor.segment_hashtags(
+    #                     Preprocessor.remove_mentions(raw_tweet)))))))
+    # print("|||||||||||||||||||||||||||||||||||||||||||")
+    # print("Processed :", clean_tweet)
+    # print(model.classify([raw_tweet, clean_tweet]))
 
 
 if __name__ == '__main__':

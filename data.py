@@ -211,7 +211,7 @@ def word_occurences():
 
     f = open("Data/crypto_unigram.txt", 'w')
     for k, v in unigram.items():
-        f.write(k + " " + str(v) + "\n")
+        f.write(k.lower() + " " + str(v) + "\n")
     # f.write(json.dumps(unigram, indent=0, sort_keys=True))
     f.close()
 

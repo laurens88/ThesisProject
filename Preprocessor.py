@@ -98,7 +98,7 @@ def translate_emojis(tweet):
                 for index in range(len(word)):
                     if index in emoji_locations:
                         translation = emoji.demojize(word[index])
-                        clean_tweet = clean_tweet + " " + translation[1:-1].replace("_", " ") + " "
+                        clean_tweet = clean_tweet + " " + translation[1:-1] + " "
                     else:
                         clean_tweet = clean_tweet + word[index]
             else:
@@ -111,7 +111,7 @@ def translate_abbreviations_slang(tweet):
            " hodl ": " hold on for dear life ",
            " htf ": " higher time frame ",
            " ltf ": " lower time frame ",
-           " btc ": " bitcoin ",
+           "btc": " bitcoin ",
            " ada ": " cardano ",
            " eth ": " ethereum ",
            " usdt ": " tether ",
@@ -129,17 +129,47 @@ def translate_abbreviations_slang(tweet):
            " mfs ": " motherfuckers ",
            " ur ": " your ",
            " af ": " as fuck ",
-           " algo ": " algorithm "}
+           " algo ": " algorithm ",
+           " doge ": " dogecoin "}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
     translated_tweet = pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower())
+    prices = [m.span() for m in re.finditer(' \d+k', translated_tweet)]
+    offset = 0
+    for i in prices:
+
+        pos = i[-1]-1 + offset
+        new_char = '.000 '
+
+        temp = list(translated_tweet)
+        temp[pos] = new_char
+        translated_tweet = "".join(temp)
+        offset += 4
+
+    prices2 = [m.span() for m in re.finditer('\d+[,|.]?\d*k', translated_tweet)]
+    offset = 0
+    for i in prices2:
+        pos = i[-1] - 1 + offset
+        new_char = '00 '
+
+        temp = list(translated_tweet)
+        temp[pos] = new_char
+        translated_tweet = "".join(temp)
+        offset += 3
+
     return translated_tweet
 
 
 def spelling_correction(tweet):
+    # return tweet
+    # # words = tweet.split()
+    # # for word in words:
+    # #     test = TextBlob(word).tags
+    # #     print(test)
+
     return TextBlob(tweet).correct()
 
 
-# set_up()
-# print(segment("thisisatest"))
+def correct_spacing(tweet):
+    return tweet.replace("_", " ")
