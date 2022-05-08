@@ -42,7 +42,7 @@ def main():
     t = Tokenizer(True)
 
     Preprocessor.set_up()
-    raw_tweet = "#btc with todays heavy drop the covid crash fractal looking more and more likely - 42k may be the max bounce from here"#x_train[0]
+    raw_tweet = x_train[0]
     print("Raw: ", raw_tweet)
     clean_tweet = Preprocessor.correct_spacing(
         str(Preprocessor.spelling_correction(
