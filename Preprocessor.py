@@ -42,9 +42,9 @@ def set_up():
 
 
 def normalize_text(tweets):
-    rep = {" &amp; ": " & ",
-           " &gt; ": " > ",
-           " &lt; ": " < ",
+    rep = {"&amp;": "&",
+           "&gt;": ">",
+           "&lt;": "<",
            "\u2026": "...",
            "\u00a3": "£",
            "\ufe0f": " ",
@@ -56,7 +56,7 @@ def normalize_text(tweets):
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
-    translated_tweets = [pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower()) for tweet in tweets]
+    translated_tweets = [pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet) for tweet in tweets]
     return translated_tweets
 
 
@@ -92,10 +92,14 @@ def segment_text(tweet):
     return wordsegment.segment(tweet)
 
 
-def remove_mentions(tweet):
+def clean_mentions_urls(tweet):
     clean_tweet = ""
     for word in tweet.split():
-        if word[0] != '@':
+        if word[0] == '@':
+            clean_tweet = clean_tweet + " " + "@USER"
+        elif word[0:4] == 'http':
+            clean_tweet = clean_tweet + " " + "HTTPURL"
+        else:
             clean_tweet = clean_tweet + " " + word
     return clean_tweet
 
@@ -111,12 +115,12 @@ def translate_emojis(tweet):
                 for index in range(len(word)):
                     if index in emoji_locations:
                         translation = emoji.demojize(word[index])
-                        clean_tweet = clean_tweet + " " + translation[1:-1] + " "
+                        clean_tweet = clean_tweet + " " + translation + " "
                     else:
                         clean_tweet = clean_tweet + word[index]
             else:
                 clean_tweet = clean_tweet + " " + word + " "
-    return clean_tweet.replace("  ", " ")
+    return clean_tweet
 
 
 def translate_abbreviations_slang(tweet):
@@ -125,9 +129,21 @@ def translate_abbreviations_slang(tweet):
            " htf ": " higher time frame ",
            " ltf ": " lower time frame ",
            "btc": " bitcoin ",
+           "BTC": " Bitcoin ",
            " ada ": " cardano ",
+           " ADA ": " Cardano",
            " eth ": " ethereum ",
+           " ETH ": " Ethereum ",
            " usdt ": " tether ",
+           " USDT ": " Tether",
+           "xrp": " ripple ",
+           "XRP": " Ripple ",
+           " doge ": " dogecoin ",
+           " DOGE ": " Dogecoin",
+           "bnb": " binance ",
+           "BNB": " Binance",
+           " sol ": " solana ",
+           " SOL ": " Solana ",
            " ta ": " technical analysis ",
            " ann ": " announcement ",
            " avg ": " average ",
@@ -143,13 +159,13 @@ def translate_abbreviations_slang(tweet):
            " ur ": " your ",
            " af ": " as fuck ",
            " algo ": " algorithm ",
-           " doge ": " dogecoin ",
-           " bnb ": " binance ",
-           " uber ": " very "}
+           " uber ": " very ",
+           " mkt ": " market ",
+           " chg ": " change "}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
-    translated_tweet = pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet.lower())
+    translated_tweet = pattern.sub(lambda m: rep[re.escape(m.group(0))], tweet)
     prices = [m.span() for m in re.finditer(' \d+k', translated_tweet)]
     offset = 0
     for i in prices:
@@ -181,7 +197,7 @@ def spelling_correction(tweet):
 
 
 def correct_spacing(tweet):
-    return tweet.replace("_", " ")
+    return tweet.replace("  ", " ")
 
 
 def process_data():
@@ -192,11 +208,12 @@ def process_data():
     X = values['X']
     y = values['y']
 
-    x_clean = normalize_text([correct_spacing(
-                translate_abbreviations_slang(
-                    segment_hashtags(
-                        translate_emojis(
-                            remove_mentions(tweet))))) for tweet in X])
+    # x_clean = normalize_text([correct_spacing(
+    #             translate_abbreviations_slang(
+    #                 segment_hashtags(
+    #                     translate_emojis(
+    #                         clean_mentions_urls(tweet))))) for tweet in X])
+    x_clean = normalize_text([correct_spacing(translate_abbreviations_slang(segment_hashtags(translate_emojis(clean_mentions_urls(tweet))))) for tweet in X])
 
     data = {'X': x_clean, 'y': y}
 
