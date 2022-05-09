@@ -208,12 +208,12 @@ def process_data():
     X = values['X']
     y = values['y']
 
-    # x_clean = normalize_text([correct_spacing(
-    #             translate_abbreviations_slang(
-    #                 segment_hashtags(
-    #                     translate_emojis(
-    #                         clean_mentions_urls(tweet))))) for tweet in X])
-    x_clean = normalize_text([correct_spacing(translate_abbreviations_slang(segment_hashtags(translate_emojis(clean_mentions_urls(tweet))))) for tweet in X])
+    x_clean = normalize_text(
+        [correct_spacing(
+            translate_abbreviations_slang(
+                segment_hashtags(
+                    translate_emojis(
+                        clean_mentions_urls(tweet))))) for tweet in X])
 
     data = {'X': x_clean, 'y': y}
 
