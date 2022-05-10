@@ -12,17 +12,24 @@ import emoji
 
 
 def main():
-    model_input = data.prepare_data()  # Data without preprocessing
-    X = model_input['X']
-    y = model_input['y']
-    x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(X, y)
+    base_data = data.prepare_data()  # Data without preprocessing
+    base_X = base_data['X']
+    base_y = base_data['y']
+
 
     # At this point the data is going to be split into two versions for the two models
 
     t = Tokenizer(True)
 
     Preprocessor.set_up()
-    Preprocessor.process_data()  # Data with preprocessing
+    clean_data = Preprocessor.process_data()  # Data with preprocessing
+    clean_X = clean_data['X']
+    clean_y = clean_data['y']
+    x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(clean_X, clean_y)
+
+    data.data_to_model_format(x_train, y_train, "train_set.json")
+    data.data_to_model_format(x_test, y_test, "test_set.json")
+    data.data_to_model_format(x_val, y_val, "val_set.json")
 
 
 if __name__ == '__main__':

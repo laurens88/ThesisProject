@@ -52,7 +52,12 @@ def normalize_text(tweets):
            "\u201c": "“",
            "\u201d": "”",
            "\u2019": "'",
-           "\u20bf": "₿"}
+           "\u20bf": "₿",
+           "\U0001f1fa": "",
+           "\U0001f1fb": "",
+           "\U0001f3fc": "",
+           "\ud83c\udffb": "",
+           "\ud83c\udffe": ""}
 
     rep = dict((re.escape(k), v) for k, v in rep.items())
     pattern = re.compile("|".join(rep.keys()))
@@ -221,4 +226,4 @@ def process_data():
     f.write(json.dumps(data, indent=0, sort_keys=True))
     f.close()
 
-
+    return data

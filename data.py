@@ -240,6 +240,27 @@ def prepare_data():
     return data
 
 
+def data_to_model_format(x, y, filename):
+    dataset = []
+    for i in range(len(x)):
+        entry = {"text": x[i], "label": transform_label(y[i])}
+        dataset.append(entry)
+
+    f = open(f"LabeledData/{filename}", 'w')
+    f.write(json.dumps(dataset, indent=0))
+    # for entry in dataset:
+    #     f.write("{\n'text': " + "'" + entry[0] + "'" + ",\n" + "'label': " + str(entry[1]) + "\n}\n")
+
+
+def transform_label(textual_label):
+    if textual_label == "Negative":
+        return 0
+    elif textual_label == "Neutral":
+        return 1
+    else:
+        return 2
+
+
 # Split tweet data corresponding labels into train test and validation sets.
 def train_test_validate_split(data_x, data_y):
     train_ratio = 0.70
