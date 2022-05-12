@@ -243,19 +243,35 @@ def prepare_data():
 def data_to_model_format(x, y, filename):
     dataset = []
     for i in range(len(x)):
-        entry = {"text": x[i], "label": transform_label(y[i])}
+        entry = {"text": x[i], "label": transform_label_num(y[i])}
         dataset.append(entry)
 
     f = open(f"LabeledData/{filename}", 'w')
     f.write(json.dumps(dataset, indent=0))
-    # for entry in dataset:
-    #     f.write("{\n'text': " + "'" + entry[0] + "'" + ",\n" + "'label': " + str(entry[1]) + "\n}\n")
 
 
-def transform_label(textual_label):
+def transform_label_num(textual_label):
     if textual_label == "Negative":
         return 0
     elif textual_label == "Neutral":
+        return 1
+    else:
+        return 2
+
+
+def transform_label_short(textual_label):
+    if textual_label == "Negative":
+        return "NEG"
+    elif textual_label == "Neutral":
+        return "NEU"
+    else:
+        return "POS"
+
+
+def transform_short_label_num(short_label):
+    if short_label == "NEG":
+        return 0
+    elif short_label == "NEU":
         return 1
     else:
         return 2
@@ -277,3 +293,29 @@ def train_test_validate_split(data_x, data_y):
                                                     test_size=int((len(data_x)) * test_ratio), stratify=y_test)
 
     return x_train, x_test, x_val, y_train, y_test, y_val
+
+
+def read_set(filename):
+    jsonfile = open(filename, 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    x = []
+    y = []
+
+    for sample in values:
+        if filename == "LabeledData/complete_set_raw.json":
+            x.append(sample['text'][:128])
+        else:
+            x.append(sample['text'])
+        y.append(sample['label'])
+
+    return x, y
+
+
+def read_labeled():
+    jsonfile = open("LabeledData/LabeledTweets.json", 'r')
+    values = json.load(jsonfile)
+    jsonfile.close()
+
+    return values['X']
