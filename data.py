@@ -250,6 +250,30 @@ def data_to_model_format(x, y, filename):
     f.write(json.dumps(dataset, indent=0))
 
 
+def data_to_k_fold_model_format(x, y, fold):
+    i_test = range((fold-1)*60, fold*60)
+    i_train = []
+    for i in range(600):
+        if i not in i_test:
+            i_train.append(i)
+    test_set = []
+    train_set = []
+    for i in range(len(x)):
+        entry = {"text": x[i], "label": transform_label_num(y[i])}
+        if i not in i_test:
+            train_set.append(entry)
+        else:
+            test_set.append(entry)
+
+    train_filename = "train"+str(fold)+".json"
+    f = open(f"LabeledData/{train_filename}", 'w')
+    f.write(json.dumps(train_set, indent=0))
+
+    test_filename = "test"+str(fold)+".json"
+    f = open(f"LabeledData/{test_filename}", 'w')
+    f.write(json.dumps(test_set, indent=0))
+
+
 def transform_label_num(textual_label):
     if textual_label == "Negative":
         return 0
