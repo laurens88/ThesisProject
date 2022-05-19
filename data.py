@@ -253,17 +253,30 @@ def data_to_model_format(x, y, filename):
 def data_to_k_fold_model_format(x, y, fold):
     i_test = range((fold-1)*60, fold*60)
     i_train = []
+    i_train_final = []
+    i_val_indeces = []
     for i in range(600):
         if i not in i_test:
             i_train.append(i)
+    for i in range(i_test[0] - 120, i_test[0]-66):
+        i_val_indeces.append(i)
+    i_val = []
+    for i in i_val_indeces:
+        i_val.append(i_train[i])
+    for i in i_train:
+        if i not in i_val:
+            i_train_final.append(i)
     test_set = []
     train_set = []
+    val_set = []
     for i in range(len(x)):
         entry = {"text": x[i], "label": transform_label_num(y[i])}
-        if i not in i_test:
+        if i in i_test:
+            test_set.append(entry)
+        elif i in i_train_final:
             train_set.append(entry)
         else:
-            test_set.append(entry)
+            val_set.append(entry)
 
     train_filename = "train"+str(fold)+".json"
     f = open(f"LabeledData/{train_filename}", 'w')
@@ -272,6 +285,10 @@ def data_to_k_fold_model_format(x, y, fold):
     test_filename = "test"+str(fold)+".json"
     f = open(f"LabeledData/{test_filename}", 'w')
     f.write(json.dumps(test_set, indent=0))
+
+    val_filename = "val"+str(fold)+".json"
+    f = open(f"LabeledData/{val_filename}", 'w')
+    f.write(json.dumps(val_set, indent=0))
 
 
 def transform_label_num(textual_label):

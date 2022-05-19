@@ -28,6 +28,7 @@ def main():
     for i in range(1, 11):
         data.data_to_k_fold_model_format(clean_X, clean_y, i)
 
+
     # x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(clean_X, clean_y)
     #
     # data.data_to_model_format(clean_X, clean_y, "complete_set.json")
