@@ -25,10 +25,10 @@ def main():
     # clean_y = clean_data['y']
     # raw_x = data.read_labeled()
 
-    test_x, _ = data.read_set("LabeledData/test6.json")  # change fold here!
+    test_x, _ = data.read_set("LabeledData/test9.json")  # change fold here!
     proposed = model.proposed_classify(test_x)
 
-    f = open("LabeledData/labels6", 'w')  # change fold here!
+    f = open("LabeledData/labels9", 'w')  # change fold here!
     f.write(json.dumps(proposed, indent=0))
 
     # for i in range(1, 11):
