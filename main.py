@@ -12,21 +12,27 @@ import emoji
 
 
 def main():
-    base_data = data.prepare_data()  # Data without preprocessing
-    base_X = base_data['X']
-    base_y = base_data['y']
+    # base_data = data.prepare_data()  # Data without preprocessing
+    # base_X = base_data['X']
+    # base_y = base_data['y']
 
 
     # At this point the data is going to be split into two versions for the two models
 
-    Preprocessor.set_up()
-    clean_data = Preprocessor.process_data()  # Data with preprocessing
-    clean_X = clean_data['X']
-    clean_y = clean_data['y']
-    raw_x = data.read_labeled()
+    # Preprocessor.set_up()
+    # clean_data = Preprocessor.process_data()  # Data with preprocessing
+    # clean_X = clean_data['X']
+    # clean_y = clean_data['y']
+    # raw_x = data.read_labeled()
 
-    for i in range(1, 11):
-        data.data_to_k_fold_model_format(clean_X, clean_y, i)
+    test_x, _ = data.read_set("LabeledData/test6.json")  # change fold here!
+    proposed = model.proposed_classify(test_x)
+
+    f = open("LabeledData/labels6", 'w')  # change fold here!
+    f.write(json.dumps(proposed, indent=0))
+
+    # for i in range(1, 11):
+    #     data.data_to_k_fold_model_format(clean_X, clean_y, i)
 
 
     # x_train, x_test, x_val, y_train, y_test, y_val = data.train_test_validate_split(clean_X, clean_y)
