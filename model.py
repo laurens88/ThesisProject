@@ -30,7 +30,7 @@ def label_dist(model):
 
 
 def compute_f1(y_pred, y_true):
-    print(f1_score(y_true, y_pred, average="macro"))
+    return f1_score(y_true, y_pred, average="macro")
 
 
 def bert_tokenize(data):
